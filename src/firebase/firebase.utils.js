@@ -75,11 +75,20 @@ export const convertCollectionSnapshotToMap = (collections) => {
   }, {});
 };
 
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      unsubscribe();
+      resolve(userAuth);
+    }, reject);
+  });
+};
+
 export const auth = firebase.auth(); // For Authorization
 export const firestore = firebase.firestore(); // For Firestore DB
 
-const provider = new firebase.auth.GoogleAuthProvider(); // Gives access to Google Auth Provider
-provider.setCustomParameters({ prompt: "select_account" }); // This triggers the Google Pop up authentication
-export const SignInWithGoogle = () => auth.signInWithPopup(provider); // Use Sign In with Google function
+export const googleProvider = new firebase.auth.GoogleAuthProvider(); // Gives access to Google Auth Provider
+googleProvider.setCustomParameters({ prompt: "select_account" }); // This triggers the Google Pop up authentication
+export const SignInWithGoogle = () => auth.signInWithPopup(googleProvider); // Use Sign In with Google function
 
 export default firebase;
